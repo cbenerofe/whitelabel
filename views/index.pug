@@ -1,1 +1,13 @@
-include index.html
+doctype html
+html(lang="en")
+  head
+    title= pageTitle
+    script(type='text/javascript').
+
+  body
+    h1 #{user.email}
+    form(method='POST' action='/logout')
+      button.btn.btn-primary(type='submit') Logout
+    
+    
+
