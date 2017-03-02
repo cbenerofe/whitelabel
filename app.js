@@ -25,7 +25,7 @@ app.use(stormpath.init(app, {
     console.log('User:', account.email, 'just registered!');
     // console.log('account:', JSON.stringify(account) );
     // check if have count.it id & token saved
-    if account.customData.countit_uid == undefined {
+    if (account.customData.countit_uid == undefined) {
       // check if already registered on count.it
       // register in count.it or check
       var resp2 = $.post( url + "/login", {email: email, password: password},function( data ) {
@@ -40,7 +40,7 @@ app.use(stormpath.init(app, {
         resp2.fail(function ( data) {
           alert( "second get fail:" + JSON.stringify(data));
         });
-      
+      });
       
     } else {
       
