@@ -1,5 +1,6 @@
 var express = require('express')
 var stormpath = require('express-stormpath');
+var request = require('request');
 
 var app = express()
 
@@ -28,11 +29,12 @@ app.use(stormpath.init(app, {
     if (account.customData.countit_uid == undefined) {
       // check if already registered on count.it
       // register in count.it or check
-      var resp2 = $.post( url + "/login", {email: email, password: password},function( data ) {
+      var resp2 = request.post( url + "/login", {email: email, password: password},function( error, response, body ) {
+        /*
         uid = data.ident
         token = data.ident
       
-        var resp3 = $.get( url, {druser: uid, drauth: token}, function( data ) {
+        var resp3 = request.get( url, {druser: uid, drauth: token}, function( data ) {
             user_data = data
             update()
             alert( "user data Loaded" );
@@ -40,6 +42,7 @@ app.use(stormpath.init(app, {
         resp2.fail(function ( data) {
           alert( "second get fail:" + JSON.stringify(data));
         });
+        */
       });
       
     } else {
@@ -48,8 +51,8 @@ app.use(stormpath.init(app, {
     }
     
     
-    var resp1 = $.get( url, {druser: uid, drauth: token}, function( data ) {
-      user_data = data
+    var resp1 = request.get( url, {druser: uid, drauth: token}, function(  error, response, body ) {
+     // user_data = data
       update()
       alert( "user data Loaded" );
     });
@@ -60,7 +63,34 @@ app.use(stormpath.init(app, {
 
   postLoginHandler: function (account, req, res, next) {
     console.log('User:', account.email, 'just logged in!');
-    console.log('account:', JSON.stringify(account) );
+    //console.log('account:', JSON.stringify(account) );
+
+
+    // check if have count.it id & token saved
+    if (account.customData.countit_uid == undefined) {
+      // check if already registered on count.it
+      // register in count.it or check
+      var resp2 = request.post( url + "/login", {email: email, password: password},function(  error, response, body ) {
+        /*
+        uid = data.ident
+        token = data.ident
+      
+        var resp3 = request.get( url, {druser: uid, drauth: token}, function( data ) {
+            user_data = data
+            update()
+            alert( "user data Loaded" );
+          });
+        resp2.fail(function ( data) {
+          alert( "second get fail:" + JSON.stringify(data));
+        });
+        */
+      });
+      
+    } else {
+      
+      
+    }
+
     next();
   }
 }));
