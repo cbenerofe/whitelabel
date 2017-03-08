@@ -71,6 +71,8 @@ app.use(stormpath.init(app, {
       // check if already registered on count.it
       // register in count.it or check
 
+      console.log("here1")
+
       url = server + "/whitelabel/get_token"
       var resp2 = request.post( {url: url, formData: { email: account.email }}, function(  error, response, body ) {
        
@@ -78,7 +80,25 @@ app.use(stormpath.init(app, {
         if (error) {
           return console.error('get token error', error)
         }
-        console.log("success", body)
+
+        console.log("got body ", body)
+
+        obj = JSON.parse(body)
+        user_uid = obj["nt"]
+        console.log("got user token id ", user_uid)
+        account.customData.countit_uid = user_uid 
+        
+
+        account.customData.save(function (err) {
+          
+          if (err) {
+            console.log("error", err.userMessage)
+            //res.status(400).end('Oops!  There was an error: ' + err.userMessage);
+          } else {
+            console.log("custom data saved")
+            //res.end('Custom data was saved!');
+          }
+        });
     
         
       });
@@ -86,6 +106,9 @@ app.use(stormpath.init(app, {
       
     } else {
 
+      console.log("here3")
+
+      console.log ('user id is', account.customData.countit_uid)
       /*
       var resp1 = request.get( user_enpoint, {druser: uid, drauth: token}, function(  error, response, body ) {
        // user_data = data
