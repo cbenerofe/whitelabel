@@ -9,5 +9,10 @@ html(lang="en")
     form(method='POST' action='/logout')
       button.btn.btn-primary(type='submit') Logout
     
+    //p
+    //  #{ JSON.stringify(user) }
+
+    p
+      a(href='http://localhost:3000/whitelabel/trackerview?user_token=' + user.customData.countit_uid target='_blank') connect trackers
     
 
