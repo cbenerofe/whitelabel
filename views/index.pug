@@ -3,16 +3,32 @@ html(lang="en")
   head
     title= pageTitle
     script(type='text/javascript').
+      var user_id = '#{user.customData.countit_uid}'
+    script(type='text/javascript', src='js/stuff.js')
 
   body
     h1 #{user.email}
     form(method='POST' action='/logout')
       button.btn.btn-primary(type='submit') Logout
-    
-    //p
-    //  #{ JSON.stringify(user) }
 
     p
       a(href='http://localhost:3000/whitelabel/trackerview?user_token=' + user.customData.countit_uid target='_blank') connect trackers
+
+    p Monthly #{ JSON.stringify(countit_user.monthly_avg) }
+
+    p Weekly #{ JSON.stringify(countit_user.weekly_avg) }
     
+    p Daily
+    
+    table
+      thead
+        tr: th Date
+            th Score
+      tbody        
+        each day in countit_user.diary
+          tr
+            th= day.date
+            th= day.score
+
+
 

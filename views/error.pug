@@ -1,0 +1,14 @@
+doctype html
+html(lang="en")
+  head
+    title= pageTitle
+
+  body
+    h1 Error Accessing countit 
+
+
+    h1 #{user.email}
+    form(method='POST' action='/logout')
+      button.btn.btn-primary(type='submit') Logout
+    
+

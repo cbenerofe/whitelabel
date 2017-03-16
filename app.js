@@ -7,8 +7,8 @@ var app = express()
 app.set('views', './views')
 app.set('view engine', 'pug')
 
-var server= "http://localhost:3000"
-var user_enpoint = server + "api/user"
+var server= "http://localhost:3000/"
+user_enpoint = server + "whitelabel/user"
 var group_id = "ec1c7d10-8bc8-4337-be60-944908236ae9"
 
 app.use(express.static('public'));
@@ -74,7 +74,27 @@ app.use(stormpath.init(app, {
 
 
 app.get('/', stormpath.authenticationRequired, function (req, res) {
-  res.render('index')
+
+  request( {url: user_enpoint, qs: { user_token: res.locals.user.customData.countit_uid }}, function(  error, response, body ) {
+     
+      //countit_user = {}
+      if (error || response.statusCode != 200) {
+
+        console.error('get user error', error, body)
+        res.render('error')
+      
+      } else {
+        
+        obj = JSON.parse(body)
+
+        res.locals.countit_user = obj['user']
+
+        res.render('index')
+      
+      }
+  })
+
+
 })
 
 app.on('stormpath.ready', function () {
